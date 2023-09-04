@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
-#new-task-form-container {
+#new-task-form-container,
+#new-project-form-container {
     display: none;
+}
+
+.close-form:hover {
+    cursor: pointer;
 }

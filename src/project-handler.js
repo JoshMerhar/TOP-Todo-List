@@ -4,7 +4,6 @@ export const projectManager = (function () {
         {
             projectName: "Default Project",
             projectTasks: [],
-            id: 0
         }
     ];
     

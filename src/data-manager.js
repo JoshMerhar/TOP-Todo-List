@@ -20,30 +20,37 @@ export const dataManager = (function () {
         return;
     }
 
-    const newProjectButton = document.querySelector("#new-project-button");
-    newProjectButton.addEventListener("click", () => {
-        const newProject = projectManager.createNewProject("Another Project", []);
+    function submitProjectForm(event) {
+        event.preventDefault();
+        const projectName = document.querySelector("#project-name").value;
+        const newProject = projectManager.createNewProject(projectName);
         allProjects.push(newProject);
         projectManager.makeProjectId();
         sortTasks();
+        domManager.loadProjectOptions();
+        domManager.resetProjectForm();
         console.log(allTasks, allProjects);
-    })
+    }
 
-    function submitForm(event) {
+    function submitTaskForm(event) {
         event.preventDefault();
         const taskName = document.querySelector("#task-name").value;
         const priority = document.querySelector("#task-priority").value;
         const dueDate = document.querySelector("#task-due-date").value;
-        const project = document.querySelector("#task-project").value;
+        const project = document.querySelector("#task-project-select").value;
         const newTask = taskManager.createNewTask(taskName, priority, dueDate, project);
         allTasks.push(newTask);
         taskManager.makeTaskId();
         sortTasks();
+        domManager.resetTaskForm();
         console.log(allTasks, allProjects);
     }
 
-    const submitTaskButton = document.querySelector("#submit-task");
-    submitTaskButton.addEventListener("click", submitForm);
+    const submitProjectButton = document.querySelector("#submit-project");
+    submitProjectButton.addEventListener("click", submitProjectForm);
 
-    return { sortTasks, submitForm };
+    const submitTaskButton = document.querySelector("#submit-task");
+    submitTaskButton.addEventListener("click", submitTaskForm);
+
+    return { sortTasks, submitProjectForm, submitTaskForm };
 })(); 

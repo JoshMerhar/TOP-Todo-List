@@ -4,28 +4,28 @@ export const taskManager = (function () {
         {
             taskName: "Go potty",
             priority: "High",
-            dueDate: "12/31/2023",
+            dueDate: "9/10/2023",
             project: "Default Project",
-            complete: false,
+            completed: false,
             id: 0
         },
         {
             taskName: "Something else",
             priority: "Medium",
-            dueDate: "9/10/2023",
-            project: "Another Project",
-            complete: false,
+            dueDate: "12/31/2023",
+            project: "Default Project",
+            completed: false,
             id: 1
         }
     ];
 
-    function createNewTask(taskName, priority, dueDate, project, complete = false) {
+    function createNewTask(taskName, priority, dueDate, project, completed = false) {
         return {
             taskName,
             priority,
             dueDate,
             project,
-            complete
+            completed
         }
     }
 
