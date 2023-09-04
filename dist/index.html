@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="main.js"></script>
+    <title>Todo List</title>
+</head>
+<body>
+    <div id="content">
+        <div id="add-content-buttons">
+            <button id="new-project-button">New Project</button>
+            <button id="new-task-button">New Task</button>
+        </div>
+        <div id="new-task-form-container">
+            <form action="main.js" id="new-task-form">
+                <div class="top-row form-row">
+                    <legend>New Task</legend>
+                    <span class="close-form">X</span>
+                </div>
+                <div class="form-row">
+                    <label for="task-name">Task Name</label>
+                    <input type="text" name="task-name" id="task-name" placeholder="Task Name" required>
+                </div>
+                <div class="form-row">
+                    <label for="task-priority">Priority</label>
+                    <select name="task-priority" id="task-priority">
+                        <option value="">
+                    </option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="task-due-date">Due Date</label>
+                    <input type="text" name="task-due-date" id="task-due-date" placeholder="Due Date" required>
+                </div>
+                <div class="form-row">
+                    <label for="task-project">Project</label>
+                    <input type="text" name="task-project" id="task-project" placeholder="Project" required>
+                </div>
+                <div class="form-row">
+                    <button type="submit" form="new-task-form" name="submit-task" id="submit-task">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

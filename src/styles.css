@@ -1,0 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
+#new-task-form-container {
+    display: none;
+}
