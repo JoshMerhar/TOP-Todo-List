@@ -8,5 +8,7 @@ const allTasks = taskManager.masterTaskList;
 const allProjects = projectManager.masterProjectList;
 
 dataManager.sortTasks();
+domManager.loadProjectOptions();
+domManager.renderTasks();
 
 console.log(allTasks, allProjects);

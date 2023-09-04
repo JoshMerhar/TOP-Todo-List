@@ -23,13 +23,18 @@ export const dataManager = (function () {
     function submitProjectForm(event) {
         event.preventDefault();
         const projectName = document.querySelector("#project-name").value;
-        const newProject = projectManager.createNewProject(projectName);
-        allProjects.push(newProject);
-        projectManager.makeProjectId();
-        sortTasks();
-        domManager.loadProjectOptions();
-        domManager.resetProjectForm();
-        console.log(allTasks, allProjects);
+        if (projectName !== "") {
+            const newProject = projectManager.createNewProject(projectName);
+            allProjects.push(newProject);
+            projectManager.makeProjectId();
+            sortTasks();
+            domManager.loadProjectOptions();
+            domManager.resetProjectForm();
+            console.log(allTasks, allProjects);
+        } else {
+            alert("Please fill out all fields.");
+            return;
+        }
     }
 
     function submitTaskForm(event) {
@@ -38,12 +43,18 @@ export const dataManager = (function () {
         const priority = document.querySelector("#task-priority").value;
         const dueDate = document.querySelector("#task-due-date").value;
         const project = document.querySelector("#task-project-select").value;
-        const newTask = taskManager.createNewTask(taskName, priority, dueDate, project);
-        allTasks.push(newTask);
-        taskManager.makeTaskId();
-        sortTasks();
-        domManager.resetTaskForm();
-        console.log(allTasks, allProjects);
+        if (taskName !== "" && priority !== "" && dueDate !== "" && project !== "") {
+            const newTask = taskManager.createNewTask(taskName, priority, dueDate, project);
+            allTasks.push(newTask);
+            taskManager.makeTaskId();
+            sortTasks();
+            domManager.resetTaskForm();
+            domManager.renderTasks();
+            console.log(allTasks, allProjects);
+        } else {
+            alert("Please fill out all fields.");
+            return;
+        }
     }
 
     const submitProjectButton = document.querySelector("#submit-project");
