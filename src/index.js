@@ -7,7 +7,8 @@ import { domManager } from "./dom-handler.js";
 const allTasks = taskManager.masterTaskList;
 const allProjects = projectManager.masterProjectList;
 
-dataManager.sortTasks();
+taskManager.makeTaskId();
+taskManager.sortTasks();
 domManager.loadProjectOptions();
 domManager.renderTasks();
 

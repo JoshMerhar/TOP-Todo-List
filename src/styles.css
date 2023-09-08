@@ -44,6 +44,10 @@
     padding-bottom: 20px;
 }
 
+#task-description {
+    width: 200px;
+}
+
 .close-form {
     display: flex;
     justify-content: center;
@@ -67,29 +71,69 @@
     gap: 10px;
 }
 
+#submit-task {
+    margin: auto;
+}
+
 #main-display {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    width: 100%;
     gap: 10px;
 }
 
-.task-node {
+.task-headers-row,
+.project-block-title {
+    font-size: 24px;
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+.task-node,
+.task-headers-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    align-items: center;
-    width: 75%;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    width: 100%;
+}
+
+.task-node,
+.task-headers-row,
+.project-block-title,
+.project-task-node {
     padding: 5px 10px;
+    box-shadow: 4px 3px 3px gray;
+}
+
+.task-node,
+.project-task-node {
+    font-size: 18px;
+}
+
+.name-and-description {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+}
+
+.task-node-description {
+    font-size: 12px;
+}
+
+.delete-task-button,
+.change-status-button {
+    font-weight: bold;
 }
 
 .project-block {
     display: flex;
     flex-direction: column;
-    width: 75%;
+    width: 100%;
     gap: 10px;
 }
 
 .project-task-node {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    padding: 5px 10px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    align-items: center;
+    width: 100%;
 }

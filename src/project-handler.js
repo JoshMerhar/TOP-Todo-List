@@ -4,6 +4,10 @@ export const projectManager = (function () {
         {
             projectName: "Default Project",
             projectTasks: [],
+        },
+        {
+            projectName: "Kenny Winker's Tasks",
+            projectTasks: [],
         }
     ];
     

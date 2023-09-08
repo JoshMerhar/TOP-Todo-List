@@ -49,20 +49,42 @@ export const domManager = (function () {
         }
     }
 
+    function renderTaskHeaders() {
+        const taskHeadersRow = document.createElement("div");
+        taskHeadersRow.innerHTML = 
+                            `<div class="task-headers-row">
+                                <div>Task</div>
+                                <div>Due Date</div>
+                                <div>Priority</div>
+                                <div>Project</div>
+                                <div>Status</div>
+                            </div>`;
+
+        mainDisplay.appendChild(taskHeadersRow);
+    }
+
     function renderTasks() {
         mainDisplay.innerHTML = "";
+        renderTaskHeaders();
         for (let i = 0; i < allTasks.length; i++) {
             const taskNode = document.createElement("div");
-            const taskNameDiv = document.createElement("div");
-            const dueDateDiv = document.createElement("div");
-            const priorityDiv = document.createElement("div");
-            const projectDiv = document.createElement("div");
-            const completedDiv = document.createElement("div");
-            taskNameDiv.textContent = allTasks[i].taskName;
-            dueDateDiv.textContent = allTasks[i].dueDate;
-            priorityDiv.textContent = allTasks[i].priority;
-            projectDiv.textContent = allTasks[i].project;
-            completedDiv.textContent = allTasks[i].completed;
+
+            taskNode.innerHTML =
+                            `<div class="task-node" data-task-id="${allTasks[i].id}">
+                                <div class="name-and-description">
+                                    <div>${allTasks[i].taskName}</div>
+                                    <div class="task-node-description">${allTasks[i].description}</div>
+                                </div>
+                                <div>${allTasks[i].dueDate}</div>
+                                <div>${allTasks[i].priority}</div>
+                                <div>${allTasks[i].project}</div>
+                                <div class="task-status">${allTasks[i].completed}</div>
+                                <div class="task-action-buttons">
+                                    <button class="change-status-button">Change status</button>
+                                    <button class="delete-task-button">Delete task</button>
+                                </div>
+                            </div>`
+            mainDisplay.appendChild(taskNode);
 
             if (allTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "red";
@@ -71,11 +93,19 @@ export const domManager = (function () {
             } else if (allTasks[i].priority === "Low") {
                 taskNode.style.backgroundColor = "green";
             }
-
-            taskNode.append(taskNameDiv, dueDateDiv, priorityDiv, projectDiv, completedDiv);
-            taskNode.classList.add("task-node");
-            mainDisplay.appendChild(taskNode);
         }
+
+        const changeStatusButtons = document.querySelectorAll(".change-status-button");
+        changeStatusButtons.forEach((changeStatusButton) => {
+            changeStatusButton.addEventListener("click", (event) => {
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                changeTaskStatus(taskId);
+            });
+        });
+        const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
+        deleteTaskButtons.forEach((deleteTaskButton, i) => {
+            deleteTaskButton.addEventListener("click", () => deleteTask(i));
+        });
     }
 
     function renderProjects() {
@@ -84,18 +114,22 @@ export const domManager = (function () {
             const projectBlock = document.createElement("div");
             const projectTitle = document.createElement("div");
             projectBlock.classList.add("project-block");
-            projectTitle.textContent = allProjects[i].projectName;
+            projectTitle.innerHTML = 
+                                `<div class="project-block-title">
+                                    <div>${allProjects[i].projectName}</div>
+                                </div>`
             projectBlock.appendChild(projectTitle);
 
             for (let j = 0; j < allProjects[i].projectTasks.length; j++) {
                 const taskNode = document.createElement("div");
-                const taskNameDiv = document.createElement("div");
-                const dueDateDiv = document.createElement("div");
-                const priorityDiv = document.createElement("div");
-                taskNode.classList.add("project-task-node");
-                taskNameDiv.textContent = allProjects[i].projectTasks[j].taskName;
-                dueDateDiv.textContent = allProjects[i].projectTasks[j].dueDate;
-                priorityDiv.textContent = allProjects[i].projectTasks[j].priority;
+
+                taskNode.innerHTML =
+                                `<div class="project-task-node">
+                                    <div>${allProjects[i].projectTasks[j].taskName}</div>
+                                    <div><b>Due:</b> ${allProjects[i].projectTasks[j].dueDate}</div>
+                                    <div><b>Priority:</b> ${allProjects[i].projectTasks[j].priority}</div>
+                                </div>`;
+                projectBlock.appendChild(taskNode);
 
                 if (allProjects[i].projectTasks[j].priority === "High") {
                     taskNode.style.backgroundColor = "red";
@@ -104,12 +138,30 @@ export const domManager = (function () {
                 } else if (allProjects[i].projectTasks[j].priority === "Low") {
                     taskNode.style.backgroundColor = "green";
                 }
-
-                taskNode.append(taskNameDiv, dueDateDiv, priorityDiv);
-                projectBlock.appendChild(taskNode);
             }
             mainDisplay.appendChild(projectBlock);
         }
+    }
+
+    function changeTaskStatus(taskId) {
+        const taskStatus = document.querySelector(`[data-task-id="${taskId}"] .task-status`);
+        if (allTasks[taskId].completed === false) {
+            allTasks[taskId].completed = true;
+            taskStatus.textContent = "Completed";
+        } else {
+            allTasks[taskId].completed = false;
+            taskStatus.textContent = "In progress";
+        }
+        console.log(allTasks);
+        return allTasks;
+    }
+    
+    function deleteTask(taskId) {
+        allTasks.splice(taskId, 1);
+        taskManager.makeTaskId();
+        taskManager.sortTasks();
+        renderTasks();
+        console.log(allTasks);
     }
 
     const showAllProjectsButton = document.querySelector("#display-projects-button");
