@@ -10,6 +10,8 @@ const allProjects = projectManager.masterProjectList;
 taskManager.makeTaskId();
 taskManager.sortTasks();
 domManager.loadProjectOptions();
-domManager.renderTasks();
+domManager.renderMenuOptions();
+taskManager.setDueDate();
+domManager.renderProjects();
 
 console.log(allTasks, allProjects);

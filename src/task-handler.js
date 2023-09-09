@@ -1,4 +1,5 @@
 import { projectManager } from "./project-handler.js";
+const { format } = require("date-fns");
 
 export const taskManager = (function () {
     const allProjects = projectManager.masterProjectList; 
@@ -8,7 +9,7 @@ export const taskManager = (function () {
             taskName: "Go potty",
             description: "Do I really need to describe what I need to do here?",
             priority: "High",
-            dueDate: "9/10/2023",
+            dueDate: "2023/09/10",
             project: "Default Project",
             completed: false,
         },
@@ -16,7 +17,7 @@ export const taskManager = (function () {
             taskName: "Something else",
             description: "",
             priority: "Medium",
-            dueDate: "12/31/2023",
+            dueDate: "2023/12/25",
             project: "Default Project",
             completed: false,
         },
@@ -24,7 +25,7 @@ export const taskManager = (function () {
             taskName: "Digest Stallone cuts",
             description: "Pray this wretched bolus passes with ease.",
             priority: "Low",
-            dueDate: "Whenever",
+            dueDate: "2023/10/01",
             project: "Kenny Winker's Tasks",
             completed: false,
         }
@@ -50,6 +51,14 @@ export const taskManager = (function () {
         return;
     }
 
+    function setDueDate() {
+        for (let i = 0; i < masterTaskList.length; i++) {
+            const taskDate = new Date(masterTaskList[i].dueDate + "EST");
+            let formattedDate = format(taskDate, "MM/dd/yyyy");
+            masterTaskList[i].dueDate = formattedDate;
+        }
+    }
+
     function sortTasks() {
         for (let i = 0; i < allProjects.length; i++) {
             allProjects[i].projectTasks = [];
@@ -64,5 +73,5 @@ export const taskManager = (function () {
         return;
     }
 
-    return { masterTaskList, createNewTask, makeTaskId, sortTasks }
+    return { masterTaskList, createNewTask, makeTaskId, setDueDate, sortTasks }
 })();

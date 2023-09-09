@@ -16,6 +16,8 @@ export const dataManager = (function () {
             taskManager.sortTasks();
             domManager.loadProjectOptions();
             domManager.resetProjectForm();
+            domManager.renderMenuOptions();
+            domManager.renderProjects();
             console.log(allTasks, allProjects);
         } else {
             alert("Please fill out all fields.");
@@ -36,7 +38,8 @@ export const dataManager = (function () {
             taskManager.makeTaskId();
             taskManager.sortTasks();
             domManager.resetTaskForm();
-            domManager.renderTasks();
+            taskManager.setDueDate();
+            domManager.renderProjects();
             console.log(allTasks, allProjects);
         } else {
             alert("Please fill out all fields.");

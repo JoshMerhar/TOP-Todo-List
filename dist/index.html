@@ -8,11 +8,19 @@
 </head>
 <body>
     <div id="content">
-        <div id="add-content-buttons">
-            <button id="new-project-button">New Project</button>
-            <button id="new-task-button">New Task</button>
-            <button id="display-projects-button">Show All Projects</button>
-            <button id="display-tasks-button">Show All Tasks</button>
+        <div id="page-title-row">
+            <div id="page-title">T A S K M A S T E R</div>
+        </div>
+        <div id="menu-column">
+            <div id="add-content-buttons">
+                <button id="new-project-button">New Project</button>
+                <button id="new-task-button">New Task</button>
+                <button id="display-projects-button">Show All Projects</button>
+                <button id="display-tasks-button">Show All Tasks</button>
+            </div>
+            <div id="project-names">
+                
+            </div>
         </div>
         <div id="new-project-form-container">
             <form action="main.js" id="new-project-form">
@@ -54,7 +62,7 @@
                 </div>
                 <div class="form-row">
                     <label for="task-due-date">Due Date</label>
-                    <input type="text" name="task-due-date" id="task-due-date" placeholder="Due Date" required>
+                    <input type="date" name="task-due-date" id="task-due-date" placeholder="Due Date" required>
                 </div>
                 <div class="form-row">
                     <label for="task-project-select">Project</label>

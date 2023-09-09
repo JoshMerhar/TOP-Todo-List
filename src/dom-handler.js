@@ -50,6 +50,9 @@ export const domManager = (function () {
     }
 
     function renderTaskHeaders() {
+        const displayTitle = document.createElement("div");
+        displayTitle.classList.add("main-display-title");
+        displayTitle.textContent = "All Tasks";
         const taskHeadersRow = document.createElement("div");
         taskHeadersRow.innerHTML = 
                             `<div class="task-headers-row">
@@ -59,20 +62,21 @@ export const domManager = (function () {
                                 <div>Project</div>
                                 <div>Status</div>
                             </div>`;
-
-        mainDisplay.appendChild(taskHeadersRow);
+        mainDisplay.append(displayTitle, taskHeadersRow);
     }
 
     function renderTasks() {
         mainDisplay.innerHTML = "";
+        const taskContainer = document.createElement("div");
+        taskContainer.classList.add("task-node-container");
         renderTaskHeaders();
+        mainDisplay.appendChild(taskContainer);
         for (let i = 0; i < allTasks.length; i++) {
             const taskNode = document.createElement("div");
-
             taskNode.innerHTML =
                             `<div class="task-node" data-task-id="${allTasks[i].id}">
                                 <div class="name-and-description">
-                                    <div>${allTasks[i].taskName}</div>
+                                    <div><b>${allTasks[i].taskName}</b></div>
                                     <div class="task-node-description">${allTasks[i].description}</div>
                                 </div>
                                 <div>${allTasks[i].dueDate}</div>
@@ -83,15 +87,17 @@ export const domManager = (function () {
                                     <button class="change-status-button">Change status</button>
                                     <button class="delete-task-button">Delete task</button>
                                 </div>
-                            </div>`
-            mainDisplay.appendChild(taskNode);
+                            </div>`;
+            taskContainer.appendChild(taskNode);
+            setTaskStatus(i);
+
 
             if (allTasks[i].priority === "High") {
-                taskNode.style.backgroundColor = "red";
+                taskNode.style.backgroundColor = "orangered";
             } else if (allTasks[i].priority === "Medium") {
-                taskNode.style.backgroundColor = "yellow";
+                taskNode.style.backgroundColor = "rgb(255, 238, 0)";
             } else if (allTasks[i].priority === "Low") {
-                taskNode.style.backgroundColor = "green";
+                taskNode.style.backgroundColor = "rgb(96, 214, 0)";
             }
         }
 
@@ -110,6 +116,10 @@ export const domManager = (function () {
 
     function renderProjects() {
         mainDisplay.innerHTML = "";
+        const displayTitle = document.createElement("div");
+        displayTitle.classList.add("main-display-title");
+        displayTitle.textContent = "All Projects";
+        mainDisplay.appendChild(displayTitle);
         for (let i = 0; i < allProjects.length; i++) {
             const projectBlock = document.createElement("div");
             const projectTitle = document.createElement("div");
@@ -117,6 +127,7 @@ export const domManager = (function () {
             projectTitle.innerHTML = 
                                 `<div class="project-block-title">
                                     <div>${allProjects[i].projectName}</div>
+                                    <button class="delete-project-button">Delete project</button>
                                 </div>`
             projectBlock.appendChild(projectTitle);
 
@@ -125,21 +136,34 @@ export const domManager = (function () {
 
                 taskNode.innerHTML =
                                 `<div class="project-task-node">
-                                    <div>${allProjects[i].projectTasks[j].taskName}</div>
+                                    <div><b>${allProjects[i].projectTasks[j].taskName}</b></div>
                                     <div><b>Due:</b> ${allProjects[i].projectTasks[j].dueDate}</div>
                                     <div><b>Priority:</b> ${allProjects[i].projectTasks[j].priority}</div>
                                 </div>`;
                 projectBlock.appendChild(taskNode);
 
                 if (allProjects[i].projectTasks[j].priority === "High") {
-                    taskNode.style.backgroundColor = "red";
+                    taskNode.style.backgroundColor = "orangered";
                 } else if (allProjects[i].projectTasks[j].priority === "Medium") {
-                    taskNode.style.backgroundColor = "yellow";
+                    taskNode.style.backgroundColor = "rgb(255, 238, 0)";
                 } else if (allProjects[i].projectTasks[j].priority === "Low") {
-                    taskNode.style.backgroundColor = "green";
+                    taskNode.style.backgroundColor = "rgb(96, 214, 0)";
                 }
             }
             mainDisplay.appendChild(projectBlock);
+        }
+        const deleteProjectButtons = document.querySelectorAll(".delete-project-button");
+        deleteProjectButtons.forEach((deleteProjectButton, i) => {
+            deleteProjectButton.addEventListener("click", () => deleteProject(i));
+        })
+    }
+
+    function setTaskStatus(taskId) {
+        const taskStatus = document.querySelector(`[data-task-id="${taskId}"] .task-status`);
+        if (allTasks[taskId].completed === false) {
+            taskStatus.textContent = "In progress";
+        } else {
+            taskStatus.textContent = "Completed";
         }
     }
 
@@ -152,8 +176,6 @@ export const domManager = (function () {
             allTasks[taskId].completed = false;
             taskStatus.textContent = "In progress";
         }
-        console.log(allTasks);
-        return allTasks;
     }
     
     function deleteTask(taskId) {
@@ -161,7 +183,103 @@ export const domManager = (function () {
         taskManager.makeTaskId();
         taskManager.sortTasks();
         renderTasks();
-        console.log(allTasks);
+    }
+
+    function deleteProject(projectId) {
+        for (let i = allProjects[projectId].projectTasks.length - 1; i >= 0; i--) {
+            allTasks.splice(allProjects[projectId].projectTasks[i].id, 1)
+        }
+        allProjects.splice(projectId, 1);
+        taskManager.makeTaskId();
+        taskManager.sortTasks();
+        projectManager.makeProjectId();
+        loadProjectOptions();
+        renderMenuOptions();
+        renderProjects();
+        console.log(allTasks, allProjects);
+    }
+
+    const menuOptions = document.querySelector("#project-names");
+
+    function renderMenuOptions() {
+        const menuBlock = document.querySelector("#menu-column");
+        menuOptions.innerHTML = "";
+
+        const menuProjectsTitle = document.createElement("div");
+        menuProjectsTitle.classList.add("menu-projects-title");
+        menuProjectsTitle.textContent = "Projects";
+        menuOptions.appendChild(menuProjectsTitle);
+        for (let i = 0; i < allProjects.length; i++) {
+            const menuProject = document.createElement("div");
+            menuProject.classList.add("menu-project-name");
+            menuProject.textContent = allProjects[i].projectName;
+            menuOptions.appendChild(menuProject);
+        }
+        menuBlock.appendChild(menuOptions);
+
+        const optionButtons = document.querySelectorAll(".menu-project-name");
+        optionButtons.forEach((optionButton, i) => {
+            optionButton.addEventListener("click", () => openProject(i));
+        })
+    }
+
+    function openProject(projectId) {
+        mainDisplay.innerHTML = "";
+        const projectBlock = document.createElement("div");
+        const projectTitle = document.createElement("div");
+        projectBlock.classList.add("project-block");
+        projectTitle.innerHTML = 
+                            `<div class="project-block-title">
+                                <div>${allProjects[projectId].projectName}</div>
+                            </div>`
+        projectBlock.appendChild(projectTitle);
+        for (let i = 0; i < allProjects[projectId].projectTasks.length; i++) {
+            const taskNode = document.createElement("div");
+
+            taskNode.innerHTML =
+                            `<div class="task-node" data-task-id="${allProjects[projectId].projectTasks[i].id}">
+                                <div class="name-and-description">
+                                    <div><b>${allProjects[projectId].projectTasks[i].taskName}</b></div>
+                                    <div class="task-node-description">${allProjects[projectId].projectTasks[i].description}</div>
+                                </div>
+                                <div><b>Due</b>: ${allProjects[projectId].projectTasks[i].dueDate}</div>
+                                <div><b>Priority</b>: ${allProjects[projectId].projectTasks[i].priority}</div>
+                                <div class="task-status">${allProjects[projectId].projectTasks[i].completed}</div>
+                                <div class="task-action-buttons">
+                                    <button class="change-status-button">Change status</button>
+                                    <button class="delete-task-button">Delete task</button>
+                                </div>
+                            </div>`;
+            projectBlock.appendChild(taskNode);
+
+            const taskStatus = taskNode.querySelector(".task-status");
+            if (allProjects[projectId].projectTasks[i].completed === false) {
+                taskStatus.innerHTML = "In progress";
+            } else {
+                taskStatus.innerHTML = "Completed";
+            }
+
+            if (allProjects[projectId].projectTasks[i].priority === "High") {
+                taskNode.style.backgroundColor = "orangered";
+            } else if (allProjects[projectId].projectTasks[i].priority === "Medium") {
+                taskNode.style.backgroundColor = "rgb(255, 238, 0)";
+            } else if (allProjects[projectId].projectTasks[i].priority === "Low") {
+                taskNode.style.backgroundColor = "rgb(96, 214, 0)";
+            }
+        }
+        mainDisplay.appendChild(projectBlock);
+
+        const changeStatusButtons = document.querySelectorAll(".change-status-button");
+        changeStatusButtons.forEach((changeStatusButton) => {
+            changeStatusButton.addEventListener("click", (event) => {
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                changeTaskStatus(taskId);
+            });
+        });
+        const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
+        deleteTaskButtons.forEach((deleteTaskButton, i) => {
+            deleteTaskButton.addEventListener("click", () => deleteTask(i));
+        });
     }
 
     const showAllProjectsButton = document.querySelector("#display-projects-button");
@@ -170,5 +288,5 @@ export const domManager = (function () {
     const showAllTasksButton = document.querySelector("#display-tasks-button");
     showAllTasksButton.addEventListener("click", renderTasks);
 
-    return { resetProjectForm, resetTaskForm, loadProjectOptions, renderTasks, renderProjects };
+    return { resetProjectForm, resetTaskForm, loadProjectOptions, renderTasks, renderProjects, renderMenuOptions };
 })();

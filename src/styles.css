@@ -11,9 +11,20 @@
     font-family: 'robotoregular', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+body {
+    background-color: whitesmoke;
+    height: 100vh;
+    overflow: hidden;
+}
+
 #content {
-    width: 90vw;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: auto 4fr;
+    width: 100%;
+    height: 100%;
     margin: auto;
+    background-color: whitesmoke;
 }
 
 #new-task-form-container,
@@ -22,7 +33,9 @@
     display: none;
     z-index: 1;
     width: 100%;
+    height: 100%;
     margin: auto;
+    background-color: rgba(245, 245, 220, .75);
 }
 
 #new-project-form,
@@ -35,7 +48,7 @@
     background-color: whitesmoke;
     border: 5px solid slategray;
     border-radius: 8px;
-    margin: auto;
+    margin: 10% auto;
 }
 
 .top-row {
@@ -71,15 +84,106 @@
     gap: 10px;
 }
 
-#submit-task {
+#submit-task,
+#submit-project {
     margin: auto;
 }
 
+#page-title-row {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    background-color: lightgray;
+}
+
+#page-title {
+    text-align: center;
+    font-size: 60px;
+    font-weight: bold;
+    margin: auto;
+    border-bottom: 4px solid black;
+}
+
+#menu-column {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    padding: 5px 10px;
+    background-color: lightgray;
+    height: 100%;
+    border-right: 4px solid black;
+}
+
+#add-content-buttons,
+#project-names {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#project-names {
+    padding: 10px 20px;
+}
+
+.menu-projects-title {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.menu-project-name {
+    font-size: 24px;
+    transition: .12s;
+}
+
+.menu-project-name:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#add-content-buttons {
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 4px solid black;
+}
+
+#add-content-buttons button {
+    border-style: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: whitesmoke;
+    background-color: darkcyan;
+    width: 80%;
+    border-radius: 8px;
+    transition: .2s;
+}
+
+#add-content-buttons button:hover {
+    transform: scale(1.1);
+    border-radius: 25px;
+}
+
 #main-display {
-    display: grid;
-    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    gap: 20px;
+    padding: 10px;
+    background-color: whitesmoke;
+}
+
+.main-display-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    font-weight: bold;
+}
+
+.task-node-container {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+    justify-content: flex-start;
 }
 
 .task-headers-row,
@@ -104,6 +208,12 @@
     box-shadow: 4px 3px 3px gray;
 }
 
+.project-block-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .task-node,
 .project-task-node {
     font-size: 18px;
@@ -119,9 +229,39 @@
     font-size: 12px;
 }
 
+.task-action-buttons {
+    display: flex;
+    align-items: center;
+    height: auto;
+    gap: 25px;
+}
+
+.delete-task-button,
+.change-status-button,
+.delete-project-button {
+    font-weight: bold;
+    border-style: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: .2s;
+}
+
 .delete-task-button,
 .change-status-button {
-    font-weight: bold;
+    background-color: whitesmoke;
+}
+
+.delete-project-button {
+    font-size: 18px;
+    color: whitesmoke;
+    background-color: darkcyan;
+    margin-right: 25px;
+}
+
+.delete-task-button:hover,
+.change-status-button:hover,
+.delete-project-button:hover {
+    transform: scale(1.1);
 }
 
 .project-block {
@@ -129,11 +269,15 @@
     flex-direction: column;
     width: 100%;
     gap: 10px;
+    margin-bottom: 15px;
 }
 
 .project-task-node {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    align-items: center;
     width: 100%;
+}
+
+.project-block-title {
+    margin-bottom: 10px;
 }
