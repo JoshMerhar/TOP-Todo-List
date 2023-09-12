@@ -1,5 +1,6 @@
 import { taskManager } from "./task-handler.js";
 import { projectManager } from "./project-handler.js";
+import { dataManager } from "./data-manager.js";
 
 export const domManager = (function () {
     const mainContainer = document.querySelector("#content");
@@ -22,10 +23,13 @@ export const domManager = (function () {
         newProjectForm.style.display = "none";
     })
 
+    const editTaskForm = document.querySelector("#edit-task-form-container");
+
     const closeFormButtons = document.querySelectorAll(".close-form");
     closeFormButtons.forEach(closeFormButton => closeFormButton.addEventListener("click", () => {
         newTaskForm.style.display = "none";
         newProjectForm.style.display = "none";
+        editTaskForm.style.display = "none";
     }))
 
     function resetProjectForm() {
@@ -38,9 +42,33 @@ export const domManager = (function () {
         newTaskForm.style.display = "none";
     }
 
+    function resetEditForm() {
+        document.querySelector("#edit-task-form").reset();
+        editTaskForm.style.display = "none";
+    }
+
     function loadProjectOptions() {
         const projectSelectOptions = document.querySelector("#task-project-select");
         projectSelectOptions.innerHTML = "";
+        const blankSpace = document.createElement("option");
+        blankSpace.textContent = "";
+        blankSpace.value = "";
+        projectSelectOptions.appendChild(blankSpace);
+        for (let i = 0; i < allProjects.length; i++) {
+            const projectOption = document.createElement("option");
+            projectOption.textContent = allProjects[i].projectName;
+            projectOption.value = allProjects[i].projectName;
+            projectSelectOptions.appendChild(projectOption);
+        }
+    }
+
+    function loadEditFormProjectOptions() {
+        const projectSelectOptions = document.querySelector("#edit-task-project-select");
+        projectSelectOptions.innerHTML = "";
+        const blankSpace = document.createElement("option");
+        blankSpace.textContent = "";
+        blankSpace.value = "";
+        projectSelectOptions.appendChild(blankSpace);
         for (let i = 0; i < allProjects.length; i++) {
             const projectOption = document.createElement("option");
             projectOption.textContent = allProjects[i].projectName;
@@ -82,15 +110,17 @@ export const domManager = (function () {
                                 <div>${allTasks[i].dueDate}</div>
                                 <div>${allTasks[i].priority}</div>
                                 <div>${allTasks[i].project}</div>
-                                <div class="task-status">${allTasks[i].completed}</div>
-                                <div class="task-action-buttons">
+                                <div class="manage-task-status">
+                                    <div class="task-status">${allTasks[i].completed}</div>
                                     <button class="change-status-button">Change status</button>
+                                </div>
+                                <div class="task-action-buttons">
                                     <button class="delete-task-button">Delete task</button>
+                                    <button class="edit-task-button">Edit task</button>
                                 </div>
                             </div>`;
             taskContainer.appendChild(taskNode);
             setTaskStatus(i);
-
 
             if (allTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "orangered";
@@ -100,6 +130,7 @@ export const domManager = (function () {
                 taskNode.style.backgroundColor = "rgb(96, 214, 0)";
             }
         }
+        loadEditFormProjectOptions();
 
         const changeStatusButtons = document.querySelectorAll(".change-status-button");
         changeStatusButtons.forEach((changeStatusButton) => {
@@ -111,6 +142,12 @@ export const domManager = (function () {
         const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
         deleteTaskButtons.forEach((deleteTaskButton, i) => {
             deleteTaskButton.addEventListener("click", () => deleteTask(i));
+        });
+        const editTaskButtons = document.querySelectorAll(".edit-task-button");
+        editTaskButtons.forEach((editTaskButton, i) => {
+            editTaskButton.addEventListener("click", (event) => {
+                dataManager.openEditForm(event, i);
+            });
         });
     }
 
@@ -139,8 +176,16 @@ export const domManager = (function () {
                                     <div><b>${allProjects[i].projectTasks[j].taskName}</b></div>
                                     <div><b>Due:</b> ${allProjects[i].projectTasks[j].dueDate}</div>
                                     <div><b>Priority:</b> ${allProjects[i].projectTasks[j].priority}</div>
+                                    <div class="task-status"><b>Status:</b> ${allProjects[i].projectTasks[j].completed}</div>
                                 </div>`;
                 projectBlock.appendChild(taskNode);
+
+                const taskStatus = taskNode.querySelector(".task-status");
+                if (allProjects[i].projectTasks[j].completed === false) {
+                    taskStatus.innerHTML = `<b>Status:</b> In progress`;
+                } else {
+                    taskStatus.innerHTML = `<b>Status:</b> Completed`;
+                }
 
                 if (allProjects[i].projectTasks[j].priority === "High") {
                     taskNode.style.backgroundColor = "orangered";
@@ -244,10 +289,13 @@ export const domManager = (function () {
                                 </div>
                                 <div><b>Due</b>: ${allProjects[projectId].projectTasks[i].dueDate}</div>
                                 <div><b>Priority</b>: ${allProjects[projectId].projectTasks[i].priority}</div>
-                                <div class="task-status">${allProjects[projectId].projectTasks[i].completed}</div>
-                                <div class="task-action-buttons">
+                                <div class="manage-task-status">
+                                    <div class="task-status">${allProjects[projectId].projectTasks[i].completed}</div>
                                     <button class="change-status-button">Change status</button>
+                                </div>
+                                <div class="task-action-buttons">
                                     <button class="delete-task-button">Delete task</button>
+                                    <button class="edit-task-button">Edit task</button>
                                 </div>
                             </div>`;
             projectBlock.appendChild(taskNode);
@@ -268,6 +316,7 @@ export const domManager = (function () {
             }
         }
         mainDisplay.appendChild(projectBlock);
+        loadEditFormProjectOptions();
 
         const changeStatusButtons = document.querySelectorAll(".change-status-button");
         changeStatusButtons.forEach((changeStatusButton) => {
@@ -280,6 +329,12 @@ export const domManager = (function () {
         deleteTaskButtons.forEach((deleteTaskButton, i) => {
             deleteTaskButton.addEventListener("click", () => deleteTask(i));
         });
+        const editTaskButtons = document.querySelectorAll(".edit-task-button");
+        editTaskButtons.forEach((editTaskButton, i) => {
+            editTaskButton.addEventListener("click", (event) => {
+                dataManager.openEditForm(event, i);
+            });
+        });
     }
 
     const showAllProjectsButton = document.querySelector("#display-projects-button");
@@ -288,5 +343,5 @@ export const domManager = (function () {
     const showAllTasksButton = document.querySelector("#display-tasks-button");
     showAllTasksButton.addEventListener("click", renderTasks);
 
-    return { resetProjectForm, resetTaskForm, loadProjectOptions, renderTasks, renderProjects, renderMenuOptions };
+    return { resetProjectForm, resetTaskForm, resetEditForm, loadProjectOptions, renderTasks, renderProjects, renderMenuOptions, openProject };
 })();

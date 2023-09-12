@@ -28,6 +28,7 @@ body {
 }
 
 #new-task-form-container,
+#edit-task-form-container,
 #new-project-form-container {
     position: fixed;
     display: none;
@@ -39,7 +40,8 @@ body {
 }
 
 #new-project-form,
-#new-task-form {
+#new-task-form,
+#edit-task-form {
     display: flex;
     flex-direction: column;
     width: 400px;
@@ -58,7 +60,7 @@ body {
 }
 
 #task-description {
-    width: 200px;
+    width: 50%;
 }
 
 .close-form {
@@ -229,15 +231,25 @@ body {
     font-size: 12px;
 }
 
+.manage-task-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 10px;
+}
+
 .task-action-buttons {
     display: flex;
-    align-items: center;
+    justify-content: right;
+    align-items: start;
+    white-space: nowrap;
     height: auto;
-    gap: 25px;
+    gap: 10px;
 }
 
 .delete-task-button,
 .change-status-button,
+.edit-task-button,
 .delete-project-button {
     font-weight: bold;
     border-style: none;
@@ -247,7 +259,8 @@ body {
 }
 
 .delete-task-button,
-.change-status-button {
+.change-status-button,
+.edit-task-button {
     background-color: whitesmoke;
 }
 
@@ -260,6 +273,7 @@ body {
 
 .delete-task-button:hover,
 .change-status-button:hover,
+.edit-task-button:hover,
 .delete-project-button:hover {
     transform: scale(1.1);
 }

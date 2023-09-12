@@ -47,11 +47,69 @@ export const dataManager = (function () {
         }
     }
 
+    function openEditForm(event, taskId) {
+        event.preventDefault();
+        const editTaskForm = document.querySelector("#edit-task-form-container");
+        editTaskForm.style.display = "block";
+        const submitEditButton = document.querySelector("#submit-edit-form");
+        submitEditButton.removeEventListener("click", submitEditChanges);
+
+        function submitEditChanges(event) {
+            event.preventDefault();
+            const taskName = document.querySelector("#edit-task-name").value;
+            if (taskName !== "") {
+                allTasks[taskId].taskName = taskName;
+            } else {
+                allTasks[taskId].taskName = allTasks[taskId].taskName;
+            }
+
+            const description = document.querySelector("#edit-task-description").value;
+            if (description !== "") {
+                allTasks[taskId].description = description;
+            } else {
+                allTasks[taskId].description = allTasks[taskId].description;
+            }
+
+            const priority = document.querySelector("#edit-task-priority").value;
+            if (priority !== "") {
+                allTasks[taskId].priority = priority;
+            } else {
+                allTasks[taskId].priority = allTasks[taskId].priority;
+            }
+
+            const dueDate = document.querySelector("#edit-task-due-date").value;
+            if (dueDate) {
+                allTasks[taskId].dueDate = dueDate;
+            } else {
+                allTasks[taskId].dueDate = allTasks[taskId].dueDate;
+            }
+
+            const project = document.querySelector("#edit-task-project-select").value;
+            if (project !== "") {
+                allTasks[taskId].project = project;
+            } else {
+                allTasks[taskId].project = allTasks[taskId].project;
+            }
+            // Something around here is still a little funky...
+            let projectId;
+            for (let i = 0; i < allProjects.length; i++) {
+                if (allTasks[taskId].project === allProjects[i].projectName) {
+                    projectId = allProjects[i].id;
+                }
+            }
+            taskManager.sortTasks();
+            domManager.openProject(projectId);
+            submitEditButton.removeEventListener("click", submitEditChanges);
+            domManager.resetEditForm();
+        }
+        submitEditButton.addEventListener("click", submitEditChanges);
+    }
+
     const submitProjectButton = document.querySelector("#submit-project");
     submitProjectButton.addEventListener("click", submitProjectForm);
 
     const submitTaskButton = document.querySelector("#submit-task");
-    submitTaskButton.addEventListener("click", submitTaskForm);    
+    submitTaskButton.addEventListener("click", submitTaskForm);
 
-    return { submitProjectForm, submitTaskForm };
+    return { submitProjectForm, submitTaskForm, openEditForm };
 })(); 

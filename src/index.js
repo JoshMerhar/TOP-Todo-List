@@ -9,6 +9,7 @@ const allProjects = projectManager.masterProjectList;
 
 taskManager.makeTaskId();
 taskManager.sortTasks();
+projectManager.makeProjectId();
 domManager.loadProjectOptions();
 domManager.renderMenuOptions();
 taskManager.setDueDate();
