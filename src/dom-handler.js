@@ -100,9 +100,10 @@ export const domManager = (function () {
         renderTaskHeaders();
         mainDisplay.appendChild(taskContainer);
         for (let i = 0; i < allTasks.length; i++) {
+            const taskId = allTasks[i].id;
             const taskNode = document.createElement("div");
             taskNode.innerHTML =
-                            `<div class="task-node" data-task-id="${allTasks[i].id}">
+                            `<div class="task-node" data-task-id="${taskId}">
                                 <div class="name-and-description">
                                     <div><b>${allTasks[i].taskName}</b></div>
                                     <div class="task-node-description">${allTasks[i].description}</div>
@@ -120,7 +121,7 @@ export const domManager = (function () {
                                 </div>
                             </div>`;
             taskContainer.appendChild(taskNode);
-            setTaskStatus(i);
+            setTaskStatus(taskId);
 
             if (allTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "orangered";
@@ -140,13 +141,17 @@ export const domManager = (function () {
             });
         });
         const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
-        deleteTaskButtons.forEach((deleteTaskButton, i) => {
-            deleteTaskButton.addEventListener("click", () => deleteTask(i));
+        deleteTaskButtons.forEach((deleteTaskButton) => {
+            deleteTaskButton.addEventListener("click", (event) => {
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                deleteTask(taskId);
+            });
         });
         const editTaskButtons = document.querySelectorAll(".edit-task-button");
-        editTaskButtons.forEach((editTaskButton, i) => {
+        editTaskButtons.forEach((editTaskButton) => {
             editTaskButton.addEventListener("click", (event) => {
-                dataManager.openEditForm(event, i);
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                dataManager.openEditForm(event, taskId);
             });
         });
     }
@@ -205,26 +210,44 @@ export const domManager = (function () {
 
     function setTaskStatus(taskId) {
         const taskStatus = document.querySelector(`[data-task-id="${taskId}"] .task-status`);
-        if (allTasks[taskId].completed === false) {
-            taskStatus.textContent = "In progress";
-        } else {
-            taskStatus.textContent = "Completed";
+        for (let i = 0; i < allTasks.length; i++) {
+            if (allTasks[i].id === taskId) {
+                if (allTasks[i].completed === false) {
+                    taskStatus.textContent = "In progress";
+                } else {
+                    taskStatus.textContent = "Completed";
+                }
+            } else {
+                continue;
+            }
         }
     }
 
     function changeTaskStatus(taskId) {
         const taskStatus = document.querySelector(`[data-task-id="${taskId}"] .task-status`);
-        if (allTasks[taskId].completed === false) {
-            allTasks[taskId].completed = true;
-            taskStatus.textContent = "Completed";
-        } else {
-            allTasks[taskId].completed = false;
-            taskStatus.textContent = "In progress";
-        }
+        for (let i = 0; i < allTasks.length; i++) {
+            if (allTasks[i].id === taskId) {
+                if (allTasks[i].completed === false) {
+                    allTasks[i].completed = true;
+                    taskStatus.textContent = "Completed";
+                } else {
+                    allTasks[i].completed = false;
+                    taskStatus.textContent = "In progress";
+                }
+            }
+        }  
     }
     
     function deleteTask(taskId) {
-        allTasks.splice(taskId, 1);
+        let taskIndex;
+        for (let i = 0; i < allTasks.length; i++) {
+            if (allTasks[i].id === taskId) {
+                taskIndex = i;
+            } else {
+                continue;
+            }
+        }
+        allTasks.splice(taskIndex, 1);
         taskManager.makeTaskId();
         taskManager.sortTasks();
         renderTasks();
@@ -280,9 +303,11 @@ export const domManager = (function () {
         projectBlock.appendChild(projectTitle);
         for (let i = 0; i < allProjects[projectId].projectTasks.length; i++) {
             const taskNode = document.createElement("div");
+            const taskId = allProjects[projectId].projectTasks[i].id;
+            console.log(taskId);
 
             taskNode.innerHTML =
-                            `<div class="task-node" data-task-id="${allProjects[projectId].projectTasks[i].id}">
+                            `<div class="task-node" data-task-id="${taskId}">
                                 <div class="name-and-description">
                                     <div><b>${allProjects[projectId].projectTasks[i].taskName}</b></div>
                                     <div class="task-node-description">${allProjects[projectId].projectTasks[i].description}</div>
@@ -326,13 +351,17 @@ export const domManager = (function () {
             });
         });
         const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
-        deleteTaskButtons.forEach((deleteTaskButton, i) => {
-            deleteTaskButton.addEventListener("click", () => deleteTask(i));
+        deleteTaskButtons.forEach((deleteTaskButton) => {
+            deleteTaskButton.addEventListener("click", (event) => {
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                deleteTask(taskId);
+            });
         });
         const editTaskButtons = document.querySelectorAll(".edit-task-button");
-        editTaskButtons.forEach((editTaskButton, i) => {
+        editTaskButtons.forEach((editTaskButton) => {
             editTaskButton.addEventListener("click", (event) => {
-                dataManager.openEditForm(event, i);
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                dataManager.openEditForm(event, taskId);
             });
         });
     }

@@ -35,7 +35,7 @@ export const dataManager = (function () {
         if (taskName !== "" && priority !== "" && dueDate !== "" && project !== "") {
             const newTask = taskManager.createNewTask(taskName, description, priority, dueDate, project);
             allTasks.push(newTask);
-            taskManager.makeTaskId();
+            taskManager.makeNewTaskId();
             taskManager.sortTasks();
             domManager.resetTaskForm();
             taskManager.setDueDate();
@@ -49,6 +49,13 @@ export const dataManager = (function () {
 
     function openEditForm(event, taskId) {
         event.preventDefault();
+        let taskIndex;
+        for (let i = 0; i < allTasks.length; i++) {
+            if (allTasks[i].id === taskId) {
+                taskIndex = i;
+            }
+        }
+        console.log(taskId);
         const editTaskForm = document.querySelector("#edit-task-form-container");
         editTaskForm.style.display = "block";
         const submitEditButton = document.querySelector("#submit-edit-form");
@@ -58,49 +65,51 @@ export const dataManager = (function () {
             event.preventDefault();
             const taskName = document.querySelector("#edit-task-name").value;
             if (taskName !== "") {
-                allTasks[taskId].taskName = taskName;
+                allTasks[taskIndex].taskName = taskName;
             } else {
-                allTasks[taskId].taskName = allTasks[taskId].taskName;
+                allTasks[taskIndex].taskName = allTasks[taskIndex].taskName;
             }
 
             const description = document.querySelector("#edit-task-description").value;
             if (description !== "") {
-                allTasks[taskId].description = description;
+                allTasks[taskIndex].description = description;
             } else {
-                allTasks[taskId].description = allTasks[taskId].description;
+                allTasks[taskIndex].description = allTasks[taskIndex].description;
             }
 
             const priority = document.querySelector("#edit-task-priority").value;
             if (priority !== "") {
-                allTasks[taskId].priority = priority;
+                allTasks[taskIndex].priority = priority;
             } else {
-                allTasks[taskId].priority = allTasks[taskId].priority;
+                allTasks[taskIndex].priority = allTasks[taskIndex].priority;
             }
 
             const dueDate = document.querySelector("#edit-task-due-date").value;
             if (dueDate) {
-                allTasks[taskId].dueDate = dueDate;
+                allTasks[taskIndex].dueDate = dueDate;
             } else {
-                allTasks[taskId].dueDate = allTasks[taskId].dueDate;
+                allTasks[taskIndex].dueDate = allTasks[taskIndex].dueDate;
             }
-
+            
             const project = document.querySelector("#edit-task-project-select").value;
             if (project !== "") {
-                allTasks[taskId].project = project;
+                allTasks[taskIndex].project = project;
+                console.log(allTasks[taskIndex].project);
             } else {
-                allTasks[taskId].project = allTasks[taskId].project;
+                allTasks[taskIndex].project = allTasks[taskIndex].project;
             }
-            // Something around here is still a little funky...
+            
             let projectId;
             for (let i = 0; i < allProjects.length; i++) {
-                if (allTasks[taskId].project === allProjects[i].projectName) {
-                    projectId = allProjects[i].id;
+                if (allTasks[taskIndex].project === allProjects[i].projectName) {
+                    projectId = allProjects[i].projectId;
                 }
             }
             taskManager.sortTasks();
-            domManager.openProject(projectId);
+            taskManager.setDueDate();
             submitEditButton.removeEventListener("click", submitEditChanges);
             domManager.resetEditForm();
+            domManager.openProject(projectId);
         }
         submitEditButton.addEventListener("click", submitEditChanges);
     }

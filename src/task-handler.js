@@ -1,4 +1,5 @@
 import { projectManager } from "./project-handler.js";
+import { v4 as uuidv4 } from "uuid";
 const { format } = require("date-fns");
 
 export const taskManager = (function () {
@@ -45,10 +46,14 @@ export const taskManager = (function () {
     function makeTaskId() {
         if (masterTaskList.length > 0) {
             for (let i = 0; i < masterTaskList.length; i++) {
-                masterTaskList[i].id = i;
+                masterTaskList[i].id = uuidv4();
             }
         }
-        return;
+    }
+
+    function makeNewTaskId() {
+        const lastIndex = masterTaskList.length - 1;
+        masterTaskList[lastIndex].id = uuidv4();
     }
 
     function setDueDate() {
@@ -73,5 +78,5 @@ export const taskManager = (function () {
         return;
     }
 
-    return { masterTaskList, createNewTask, makeTaskId, setDueDate, sortTasks }
+    return { masterTaskList, createNewTask, makeTaskId, makeNewTaskId, setDueDate, sortTasks }
 })();

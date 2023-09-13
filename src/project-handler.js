@@ -21,7 +21,7 @@ export const projectManager = (function () {
     function makeProjectId() {
         if (masterProjectList.length > 0) {
             for (let i = 0; i < masterProjectList.length; i++) {
-                masterProjectList[i].id = i;
+                masterProjectList[i].projectId = i;
             }
         }
         return;
