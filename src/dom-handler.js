@@ -111,14 +111,7 @@ export const domManager = (function () {
                                 <div>${allTasks[i].dueDate}</div>
                                 <div>${allTasks[i].priority}</div>
                                 <div>${allTasks[i].project}</div>
-                                <div class="manage-task-status">
-                                    <div class="task-status">${allTasks[i].completed}</div>
-                                    <button class="change-status-button">Change status</button>
-                                </div>
-                                <div class="task-action-buttons">
-                                    <button class="delete-task-button">Delete task</button>
-                                    <button class="edit-task-button">Edit task</button>
-                                </div>
+                                <div class="task-status">${allTasks[i].completed}</div>
                             </div>`;
             taskContainer.appendChild(taskNode);
             setTaskStatus(taskId);
@@ -132,28 +125,6 @@ export const domManager = (function () {
             }
         }
         loadEditFormProjectOptions();
-
-        const changeStatusButtons = document.querySelectorAll(".change-status-button");
-        changeStatusButtons.forEach((changeStatusButton) => {
-            changeStatusButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                changeTaskStatus(taskId);
-            });
-        });
-        const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
-        deleteTaskButtons.forEach((deleteTaskButton) => {
-            deleteTaskButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                deleteTask(taskId);
-            });
-        });
-        const editTaskButtons = document.querySelectorAll(".edit-task-button");
-        editTaskButtons.forEach((editTaskButton) => {
-            editTaskButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                dataManager.openEditForm(event, taskId);
-            });
-        });
     }
 
     function renderProjects() {
@@ -165,13 +136,16 @@ export const domManager = (function () {
         for (let i = 0; i < allProjects.length; i++) {
             const projectBlock = document.createElement("div");
             const projectTitle = document.createElement("div");
+            const projectId = allProjects[i].projectId;
             projectBlock.classList.add("project-block");
             projectTitle.innerHTML = 
-                                `<div class="project-block-title">
+                                `<div class="project-block-title" "data-project-id=${projectId}>
                                     <div>${allProjects[i].projectName}</div>
                                     <button class="delete-project-button">Delete project</button>
                                 </div>`
             projectBlock.appendChild(projectTitle);
+            const deleteButton = projectTitle.querySelector(".delete-project-button");
+            deleteButton.addEventListener("click", () => deleteProject(projectId));
 
             for (let j = 0; j < allProjects[i].projectTasks.length; j++) {
                 const taskNode = document.createElement("div");
@@ -202,10 +176,6 @@ export const domManager = (function () {
             }
             mainDisplay.appendChild(projectBlock);
         }
-        const deleteProjectButtons = document.querySelectorAll(".delete-project-button");
-        deleteProjectButtons.forEach((deleteProjectButton, i) => {
-            deleteProjectButton.addEventListener("click", () => deleteProject(i));
-        })
     }
 
     function setTaskStatus(taskId) {
@@ -238,29 +208,36 @@ export const domManager = (function () {
         }  
     }
     
-    function deleteTask(taskId) {
+    function deleteTask(taskId, projectId) {
         let taskIndex;
         for (let i = 0; i < allTasks.length; i++) {
             if (allTasks[i].id === taskId) {
                 taskIndex = i;
-            } else {
-                continue;
+                break;
             }
         }
         allTasks.splice(taskIndex, 1);
-        taskManager.makeTaskId();
         taskManager.sortTasks();
-        renderTasks();
+        openProject(projectId);
     }
 
     function deleteProject(projectId) {
-        for (let i = allProjects[projectId].projectTasks.length - 1; i >= 0; i--) {
-            allTasks.splice(allProjects[projectId].projectTasks[i].id, 1)
+        let projectIndex;
+        for (let i = 0; i < allProjects.length; i++) {
+            if (allProjects[i].projectId === projectId) {
+                projectIndex = i;
+                break;
+            } 
         }
-        allProjects.splice(projectId, 1);
-        taskManager.makeTaskId();
-        taskManager.sortTasks();
-        projectManager.makeProjectId();
+
+        const projectTasks = allProjects[projectIndex].projectTasks;
+        for (let i = 0; i < projectTasks.length; i++) {
+            const taskId = projectTasks[i].id;
+            const taskIndex = allTasks.findIndex(task => task.id === taskId);
+            allTasks.splice(taskIndex, 1);
+        }
+
+        allProjects.splice(projectIndex, 1);
         loadProjectOptions();
         renderMenuOptions();
         renderProjects();
@@ -272,50 +249,56 @@ export const domManager = (function () {
     function renderMenuOptions() {
         const menuBlock = document.querySelector("#menu-column");
         menuOptions.innerHTML = "";
-
         const menuProjectsTitle = document.createElement("div");
         menuProjectsTitle.classList.add("menu-projects-title");
         menuProjectsTitle.textContent = "Projects";
         menuOptions.appendChild(menuProjectsTitle);
         for (let i = 0; i < allProjects.length; i++) {
             const menuProject = document.createElement("div");
+            const projectId = allProjects[i].projectId;
             menuProject.classList.add("menu-project-name");
             menuProject.textContent = allProjects[i].projectName;
             menuOptions.appendChild(menuProject);
+
+            menuProject.addEventListener("click", () => {
+                openProject(projectId);
+            });
         }
         menuBlock.appendChild(menuOptions);
-
-        const optionButtons = document.querySelectorAll(".menu-project-name");
-        optionButtons.forEach((optionButton, i) => {
-            optionButton.addEventListener("click", () => openProject(i));
-        })
     }
-
+    
     function openProject(projectId) {
         mainDisplay.innerHTML = "";
+        let projectIndex;
+        for (let i = 0; i < allProjects.length; i++) {
+            if (allProjects[i].projectId === projectId) {
+                projectIndex = i;
+            } else {
+                continue;
+            }
+        }
         const projectBlock = document.createElement("div");
         const projectTitle = document.createElement("div");
         projectBlock.classList.add("project-block");
         projectTitle.innerHTML = 
                             `<div class="project-block-title">
-                                <div>${allProjects[projectId].projectName}</div>
+                                <div>${allProjects[projectIndex].projectName}</div>
                             </div>`
         projectBlock.appendChild(projectTitle);
-        for (let i = 0; i < allProjects[projectId].projectTasks.length; i++) {
+        for (let i = 0; i < allProjects[projectIndex].projectTasks.length; i++) {
             const taskNode = document.createElement("div");
-            const taskId = allProjects[projectId].projectTasks[i].id;
-            console.log(taskId);
+            const taskId = allProjects[projectIndex].projectTasks[i].id;
 
             taskNode.innerHTML =
                             `<div class="task-node" data-task-id="${taskId}">
                                 <div class="name-and-description">
-                                    <div><b>${allProjects[projectId].projectTasks[i].taskName}</b></div>
-                                    <div class="task-node-description">${allProjects[projectId].projectTasks[i].description}</div>
+                                    <div><b>${allProjects[projectIndex].projectTasks[i].taskName}</b></div>
+                                    <div class="task-node-description">${allProjects[projectIndex].projectTasks[i].description}</div>
                                 </div>
-                                <div><b>Due</b>: ${allProjects[projectId].projectTasks[i].dueDate}</div>
-                                <div><b>Priority</b>: ${allProjects[projectId].projectTasks[i].priority}</div>
+                                <div><b>Due</b>: ${allProjects[projectIndex].projectTasks[i].dueDate}</div>
+                                <div><b>Priority</b>: ${allProjects[projectIndex].projectTasks[i].priority}</div>
                                 <div class="manage-task-status">
-                                    <div class="task-status">${allProjects[projectId].projectTasks[i].completed}</div>
+                                    <div class="task-status">${allProjects[projectIndex].projectTasks[i].completed}</div>
                                     <button class="change-status-button">Change status</button>
                                 </div>
                                 <div class="task-action-buttons">
@@ -326,17 +309,17 @@ export const domManager = (function () {
             projectBlock.appendChild(taskNode);
 
             const taskStatus = taskNode.querySelector(".task-status");
-            if (allProjects[projectId].projectTasks[i].completed === false) {
+            if (allProjects[projectIndex].projectTasks[i].completed === false) {
                 taskStatus.innerHTML = "In progress";
             } else {
                 taskStatus.innerHTML = "Completed";
             }
 
-            if (allProjects[projectId].projectTasks[i].priority === "High") {
+            if (allProjects[projectIndex].projectTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "orangered";
-            } else if (allProjects[projectId].projectTasks[i].priority === "Medium") {
+            } else if (allProjects[projectIndex].projectTasks[i].priority === "Medium") {
                 taskNode.style.backgroundColor = "rgb(255, 238, 0)";
-            } else if (allProjects[projectId].projectTasks[i].priority === "Low") {
+            } else if (allProjects[projectIndex].projectTasks[i].priority === "Low") {
                 taskNode.style.backgroundColor = "rgb(96, 214, 0)";
             }
         }
@@ -354,7 +337,7 @@ export const domManager = (function () {
         deleteTaskButtons.forEach((deleteTaskButton) => {
             deleteTaskButton.addEventListener("click", (event) => {
                 const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                deleteTask(taskId);
+                deleteTask(taskId, projectId);
             });
         });
         const editTaskButtons = document.querySelectorAll(".edit-task-button");

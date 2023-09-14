@@ -1,31 +1,34 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const projectManager = (function () {
     
     const masterProjectList = [
         {
             projectName: "Default Project",
-            projectTasks: [],
         },
         {
             projectName: "Kenny Winker's Tasks",
-            projectTasks: [],
         }
     ];
     
-    function createNewProject(projectName, projectTasks = []) {
+    function createNewProject(projectName) {
         return {
             projectName,
-            projectTasks,
         }
     }
 
     function makeProjectId() {
         if (masterProjectList.length > 0) {
             for (let i = 0; i < masterProjectList.length; i++) {
-                masterProjectList[i].projectId = i;
+                masterProjectList[i].projectId = uuidv4();
             }
         }
-        return;
     }
 
-    return { masterProjectList, createNewProject, makeProjectId }
+    function makeNewProjectId() {
+        const lastIndex = masterProjectList.length - 1;
+        masterProjectList[lastIndex].projectId = uuidv4();
+    }
+
+    return { masterProjectList, createNewProject, makeProjectId, makeNewProjectId }
 })();

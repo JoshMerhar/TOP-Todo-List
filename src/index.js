@@ -8,11 +8,11 @@ const allTasks = taskManager.masterTaskList;
 const allProjects = projectManager.masterProjectList;
 
 taskManager.makeTaskId();
+taskManager.setDueDate();
 taskManager.sortTasks();
 projectManager.makeProjectId();
 domManager.loadProjectOptions();
 domManager.renderMenuOptions();
-taskManager.setDueDate();
 domManager.renderProjects();
 
 console.log(allTasks, allProjects);

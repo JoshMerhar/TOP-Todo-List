@@ -12,7 +12,7 @@ export const dataManager = (function () {
         if (projectName !== "") {
             const newProject = projectManager.createNewProject(projectName);
             allProjects.push(newProject);
-            projectManager.makeProjectId();
+            projectManager.makeNewProjectId();
             taskManager.sortTasks();
             domManager.loadProjectOptions();
             domManager.resetProjectForm();
@@ -55,7 +55,6 @@ export const dataManager = (function () {
                 taskIndex = i;
             }
         }
-        console.log(taskId);
         const editTaskForm = document.querySelector("#edit-task-form-container");
         editTaskForm.style.display = "block";
         const submitEditButton = document.querySelector("#submit-edit-form");
@@ -94,7 +93,6 @@ export const dataManager = (function () {
             const project = document.querySelector("#edit-task-project-select").value;
             if (project !== "") {
                 allTasks[taskIndex].project = project;
-                console.log(allTasks[taskIndex].project);
             } else {
                 allTasks[taskIndex].project = allTasks[taskIndex].project;
             }
