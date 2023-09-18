@@ -55,15 +55,21 @@ export const dataManager = (function () {
     function openEditForm(event, taskId) {
         event.preventDefault();
         const taskIndex = allTasks.findIndex(task => task.id === taskId);
-        console.log(taskIndex);
+        console.log(taskId);
 
         const editTaskForm = document.querySelector("#edit-task-form-container");
         editTaskForm.style.display = "block";
         const submitEditButton = document.querySelector("#submit-edit-form");
         submitEditButton.removeEventListener("click", submitEditChanges);
+        const closeFormButton = document.querySelector("#close-edit-form");
+        closeFormButton.addEventListener("click", () => {
+            submitEditButton.removeEventListener("click", submitEditChanges);
+        });
 
         function submitEditChanges(event) {
             event.preventDefault();
+            console.log(taskId);
+            
             const taskName = document.querySelector("#edit-task-name").value;
             if (taskName !== "") {
                 allTasks[taskIndex].taskName = taskName;

@@ -323,11 +323,6 @@ export const domManager = (function () {
                 taskStatus.innerHTML = "Completed";
             }
 
-            const editTaskButton = taskNode.querySelector(".edit-task-button");
-            editTaskButton.addEventListener("click", (event) => {
-                dataManager.openEditForm(event, taskId);
-            });
-
             if (allProjects[projectIndex].projectTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "orangered";
             } else if (allProjects[projectIndex].projectTasks[i].priority === "Medium") {
@@ -339,21 +334,22 @@ export const domManager = (function () {
         mainDisplay.appendChild(projectBlock);
         loadEditFormProjectOptions();
 
-        const changeStatusButtons = document.querySelectorAll(".change-status-button");
-        changeStatusButtons.forEach((changeStatusButton) => {
-            changeStatusButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                changeTaskStatus(taskId);
-            });
-        });
-        const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
-        deleteTaskButtons.forEach((deleteTaskButton) => {
-            deleteTaskButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                deleteTask(taskId, projectId);
-            });
-        });
     }
+
+    mainDisplay.addEventListener("click", (event) => {
+        const target = event.target;
+    
+        if (target.classList.contains("edit-task-button")) {
+            const taskId = target.closest(".task-node").getAttribute("data-task-id");
+            dataManager.openEditForm(event, taskId);
+        } else if (target.classList.contains("change-status-button")) {
+            const taskId = target.closest(".task-node").getAttribute("data-task-id");
+            changeTaskStatus(taskId);
+        } else if (target.classList.contains("delete-task-button")) {
+            const taskId = target.closest(".task-node").getAttribute("data-task-id");
+            deleteTask(taskId, projectId);
+        }
+    });
 
     const showAllProjectsButton = document.querySelector("#display-projects-button");
     showAllProjectsButton.addEventListener("click", renderProjects);
