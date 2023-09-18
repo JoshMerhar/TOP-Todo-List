@@ -1,7 +1,9 @@
 import { taskManager } from "./task-handler.js";
 
-export const storageManager = (function() {
+export const storageManager = (function () {
+    
     let allStoredTasks = [];
+    fetchTasks();
 
     function fetchTasks() {
         if (!localStorage.getItem("tasks")) {
@@ -11,6 +13,7 @@ export const storageManager = (function() {
             taskList = JSON.parse(taskList);
             allStoredTasks = JSON.parse(JSON.stringify(taskList));
             console.log(allStoredTasks);
+            return allStoredTasks;
         }
     }
 

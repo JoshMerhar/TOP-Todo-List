@@ -4,9 +4,7 @@ import { taskManager } from "./task-handler.js";
 import { projectManager } from "./project-handler.js";
 import { domManager } from "./dom-handler.js";
 
-storageManager.fetchTasks();
-
-const allTasks = taskManager.masterTaskList;
+const allTasks = storageManager.allStoredTasks;
 const allProjects = projectManager.masterProjectList;
 
 taskManager.makeTaskId();

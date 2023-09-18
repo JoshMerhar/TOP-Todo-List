@@ -5,7 +5,7 @@ const { format } = require("date-fns");
 export const taskManager = (function () {
     const allProjects = projectManager.masterProjectList; 
     
-    const masterTaskList = [
+    let masterTaskList = [
         {
             taskName: "Go potty",
             description: "Do I really need to describe what I need to do here?",
@@ -31,6 +31,12 @@ export const taskManager = (function () {
             completed: false,
         }
     ];
+
+    if (localStorage.getItem("tasks")) {
+        let taskList = localStorage.getItem("tasks");
+        taskList = JSON.parse(taskList);
+        masterTaskList = JSON.parse(JSON.stringify(taskList));
+    }
 
     function createNewTask(taskName, description, priority, dueDate, project, completed = false) {
         return {
