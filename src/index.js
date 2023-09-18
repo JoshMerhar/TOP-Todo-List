@@ -7,9 +7,10 @@ import { domManager } from "./dom-handler.js";
 const allTasks = storageManager.allStoredTasks;
 const allProjects = storageManager.allStoredProjects;
 
-if (!localStorage.getItem("tasks")) {
+if (!allTasks[0].id) {
     taskManager.makeTaskId();
 }
+
 taskManager.setDueDate();
 taskManager.sortTasks();
 if (!localStorage.getItem("Projects")) {
