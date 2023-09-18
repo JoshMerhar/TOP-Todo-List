@@ -1,9 +1,9 @@
 import { taskManager } from "./task-handler.js";
 import { projectManager } from "./project-handler.js";
 import { dataManager } from "./data-manager.js";
+import { storageManager } from "./storage-handler.js";
 
 export const domManager = (function () {
-    const mainContainer = document.querySelector("#content");
     const mainDisplay = document.querySelector("#main-display");
 
     const allTasks = taskManager.masterTaskList;
@@ -200,9 +200,13 @@ export const domManager = (function () {
                 if (allTasks[i].completed === false) {
                     allTasks[i].completed = true;
                     taskStatus.textContent = "Completed";
+                    storageManager.fetchTasks();
+                    storageManager.populateStorage();
                 } else {
                     allTasks[i].completed = false;
                     taskStatus.textContent = "In progress";
+                    storageManager.fetchTasks();
+                    storageManager.populateStorage();
                 }
             }
         }  
@@ -219,6 +223,8 @@ export const domManager = (function () {
         allTasks.splice(taskIndex, 1);
         taskManager.sortTasks();
         openProject(projectId);
+        storageManager.fetchTasks();
+        storageManager.populateStorage();
     }
 
     function deleteProject(projectId) {
@@ -241,6 +247,8 @@ export const domManager = (function () {
         loadProjectOptions();
         renderMenuOptions();
         renderProjects();
+        storageManager.fetchTasks();
+        storageManager.populateStorage();
         console.log(allTasks, allProjects);
     }
 
@@ -354,6 +362,8 @@ export const domManager = (function () {
 
     const showAllTasksButton = document.querySelector("#display-tasks-button");
     showAllTasksButton.addEventListener("click", renderTasks);
+
+    window.addEventListener("storage", storageManager.fetchTasks);
 
     return { resetProjectForm, resetTaskForm, resetEditForm, loadProjectOptions, renderTasks, renderProjects, renderMenuOptions, openProject };
 })();

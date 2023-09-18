@@ -1,6 +1,7 @@
 import { taskManager } from "./task-handler.js";
 import { projectManager } from "./project-handler.js";
 import { domManager } from "./dom-handler.js";
+import { storageManager } from "./storage-handler.js";
 
 export const dataManager = (function () {
     const allTasks = taskManager.masterTaskList;
@@ -18,6 +19,8 @@ export const dataManager = (function () {
             domManager.resetProjectForm();
             domManager.renderMenuOptions();
             domManager.renderProjects();
+            storageManager.fetchTasks();
+            storageManager.populateStorage();
             console.log(allTasks, allProjects);
         } else {
             alert("Please fill out all fields.");
@@ -40,6 +43,8 @@ export const dataManager = (function () {
             domManager.resetTaskForm();
             taskManager.setDueDate();
             domManager.renderProjects();
+            storageManager.fetchTasks();
+            storageManager.populateStorage();
             console.log(allTasks, allProjects);
         } else {
             alert("Please fill out all fields.");
@@ -107,6 +112,8 @@ export const dataManager = (function () {
             taskManager.setDueDate();
             submitEditButton.removeEventListener("click", submitEditChanges);
             domManager.resetEditForm();
+            storageManager.fetchTasks();
+            storageManager.populateStorage();
             domManager.openProject(projectId);
         }
         submitEditButton.addEventListener("click", submitEditChanges);
@@ -117,6 +124,12 @@ export const dataManager = (function () {
 
     const submitTaskButton = document.querySelector("#submit-task");
     submitTaskButton.addEventListener("click", submitTaskForm);
+
+    window.addEventListener("storage", (event) => {
+        if (event.key === "tasks") {
+            storageManager.fetchTasks();
+        }
+    });
 
     return { submitProjectForm, submitTaskForm, openEditForm };
 })(); 
