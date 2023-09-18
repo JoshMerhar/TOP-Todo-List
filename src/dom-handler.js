@@ -139,7 +139,7 @@ export const domManager = (function () {
             const projectId = allProjects[i].projectId;
             projectBlock.classList.add("project-block");
             projectTitle.innerHTML = 
-                                `<div class="project-block-title" "data-project-id=${projectId}>
+                                `<div class="project-block-title" data-project-id="${projectId}">
                                     <div>${allProjects[i].projectName}</div>
                                     <button class="delete-project-button">Delete project</button>
                                 </div>`
@@ -334,6 +334,13 @@ export const domManager = (function () {
         mainDisplay.appendChild(projectBlock);
         loadEditFormProjectOptions();
 
+        const deleteTaskButtons = document.querySelectorAll(".delete-task-button");
+        deleteTaskButtons.forEach((deleteTaskButton) => {
+            deleteTaskButton.addEventListener("click", (event) => {
+                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
+                deleteTask(taskId, projectId);
+            });
+        });
     }
 
     mainDisplay.addEventListener("click", (event) => {
@@ -345,9 +352,6 @@ export const domManager = (function () {
         } else if (target.classList.contains("change-status-button")) {
             const taskId = target.closest(".task-node").getAttribute("data-task-id");
             changeTaskStatus(taskId);
-        } else if (target.classList.contains("delete-task-button")) {
-            const taskId = target.closest(".task-node").getAttribute("data-task-id");
-            deleteTask(taskId, projectId);
         }
     });
 
