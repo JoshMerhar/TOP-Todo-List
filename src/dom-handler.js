@@ -27,9 +27,9 @@ export const domManager = (function () {
 
     const closeFormButtons = document.querySelectorAll(".close-form");
     closeFormButtons.forEach(closeFormButton => closeFormButton.addEventListener("click", () => {
-        newTaskForm.style.display = "none";
-        newProjectForm.style.display = "none";
-        editTaskForm.style.display = "none";
+        resetProjectForm();
+        resetTaskForm();
+        resetEditForm();
     }))
 
     function resetProjectForm() {
@@ -323,6 +323,11 @@ export const domManager = (function () {
                 taskStatus.innerHTML = "Completed";
             }
 
+            const editTaskButton = taskNode.querySelector(".edit-task-button");
+            editTaskButton.addEventListener("click", (event) => {
+                dataManager.openEditForm(event, taskId);
+            });
+
             if (allProjects[projectIndex].projectTasks[i].priority === "High") {
                 taskNode.style.backgroundColor = "orangered";
             } else if (allProjects[projectIndex].projectTasks[i].priority === "Medium") {
@@ -346,13 +351,6 @@ export const domManager = (function () {
             deleteTaskButton.addEventListener("click", (event) => {
                 const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
                 deleteTask(taskId, projectId);
-            });
-        });
-        const editTaskButtons = document.querySelectorAll(".edit-task-button");
-        editTaskButtons.forEach((editTaskButton) => {
-            editTaskButton.addEventListener("click", (event) => {
-                const taskId = event.target.closest(".task-node").getAttribute("data-task-id");
-                dataManager.openEditForm(event, taskId);
             });
         });
     }

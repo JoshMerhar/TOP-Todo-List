@@ -54,12 +54,9 @@ export const dataManager = (function () {
 
     function openEditForm(event, taskId) {
         event.preventDefault();
-        let taskIndex;
-        for (let i = 0; i < allTasks.length; i++) {
-            if (allTasks[i].id === taskId) {
-                taskIndex = i;
-            }
-        }
+        const taskIndex = allTasks.findIndex(task => task.id === taskId);
+        console.log(taskIndex);
+
         const editTaskForm = document.querySelector("#edit-task-form-container");
         editTaskForm.style.display = "block";
         const submitEditButton = document.querySelector("#submit-edit-form");

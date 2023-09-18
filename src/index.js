@@ -5,7 +5,7 @@ import { projectManager } from "./project-handler.js";
 import { domManager } from "./dom-handler.js";
 
 const allTasks = storageManager.allStoredTasks;
-const allProjects = projectManager.masterProjectList;
+const allProjects = storageManager.allStoredProjects;
 
 taskManager.makeTaskId();
 taskManager.setDueDate();

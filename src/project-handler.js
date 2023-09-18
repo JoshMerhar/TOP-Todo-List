@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const projectManager = (function () {
     
-    const masterProjectList = [
+    let masterProjectList = [
         {
             projectName: "Default Project",
         },
@@ -10,6 +10,12 @@ export const projectManager = (function () {
             projectName: "Kenny Winker's Tasks",
         }
     ];
+
+    if (localStorage.getItem("projects")) {
+        let projectList = localStorage.getItem("projects");
+        projectList = JSON.parse(projectList);
+        masterProjectList = JSON.parse(JSON.stringify(projectList));
+    }
     
     function createNewProject(projectName) {
         return {

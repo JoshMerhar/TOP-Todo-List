@@ -1,8 +1,10 @@
 import { taskManager } from "./task-handler.js";
+import { projectManager } from "./project-handler.js";
 
 export const storageManager = (function () {
     
     let allStoredTasks = [];
+    let allStoredProjects = [];
     fetchTasks();
 
     function fetchTasks() {
@@ -12,16 +14,20 @@ export const storageManager = (function () {
             let taskList = localStorage.getItem("tasks");
             taskList = JSON.parse(taskList);
             allStoredTasks = JSON.parse(JSON.stringify(taskList));
-            console.log(allStoredTasks);
-            return allStoredTasks;
+
+            let projectList = localStorage.getItem("projects");
+            projectList = JSON.parse(projectList);
+            allStoredProjects = JSON.parse(JSON.stringify(projectList));
         }
     }
 
     function populateStorage() {
         allStoredTasks = JSON.parse(JSON.stringify(taskManager.masterTaskList));
         localStorage.setItem("tasks", JSON.stringify(allStoredTasks));
-        console.log(allStoredTasks);
+
+        allStoredProjects = JSON.parse(JSON.stringify(projectManager.masterProjectList));
+        localStorage.setItem("projects", JSON.stringify(allStoredProjects));
     }
 
-    return { allStoredTasks, fetchTasks, populateStorage }
+    return { allStoredTasks, allStoredProjects, fetchTasks, populateStorage }
 })();
