@@ -8,22 +8,22 @@ const allTasks = storageManager.allStoredTasks;
 const allProjects = storageManager.allStoredProjects;
 
 if (!allTasks[0].id) {
-    taskManager.makeTaskId();
+  taskManager.makeTaskId();
 }
 
 taskManager.setDueDate();
 taskManager.sortTasks();
 if (!localStorage.getItem("Projects")) {
-    projectManager.makeProjectId();
+  projectManager.makeProjectId();
 }
 domManager.loadProjectOptions();
 domManager.renderMenuOptions();
 domManager.renderProjects();
 
 window.addEventListener("storage", (event) => {
-    if (event.key === "tasks") {
-        storageManager.fetchTasks();
-    }
+  if (event.key === "tasks") {
+    storageManager.fetchTasks();
+  }
 });
 
 console.log(allTasks, allProjects);

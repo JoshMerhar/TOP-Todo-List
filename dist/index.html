@@ -1,117 +1,179 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script defer src="main.js"></script>
     <title>Todo List</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="content">
-        <div id="page-title-row">
-            <div id="page-title">T A S K M A S T E R</div>
+      <div id="page-title-row">
+        <div id="page-title">T A S K M A S T E R</div>
+      </div>
+      <div id="menu-column">
+        <div id="add-content-buttons">
+          <button id="new-project-button">New Project</button>
+          <button id="new-task-button">New Task</button>
+          <button id="display-projects-button">All Projects</button>
+          <button id="display-tasks-button">All Tasks</button>
         </div>
-        <div id="menu-column">
-            <div id="add-content-buttons">
-                <button id="new-project-button">New Project</button>
-                <button id="new-task-button">New Task</button>
-                <button id="display-projects-button">All Projects</button>
-                <button id="display-tasks-button">All Tasks</button>
-            </div>
-            <div id="project-names">
-                
-            </div>
-        </div>
-        <div id="new-project-form-container">
-            <form action="main.js" id="new-project-form">
-                <div class="top-row form-row">
-                    <legend>New Project</legend>
-                    <span class="close-form">X</span>
-                </div>
-                <div class="form-row">
-                    <label for="project-name">Project Name</label>
-                    <input type="text" name="project-name" id="project-name" placeholder="Project Name" required>
-                </div>
-                <div class="form-row">
-                    <button type="submit" form="new-project-form" name="submit-project" id="submit-project">Create Project</button>
-                </div>
-            </form>
-        </div>
-        <div id="new-task-form-container">
-            <form action="main.js" id="new-task-form">
-                <div class="top-row form-row">
-                    <legend>New Task</legend>
-                    <span class="close-form">X</span>
-                </div>
-                <div class="form-row">
-                    <label for="task-name">Task Name</label>
-                    <input type="text" name="task-name" id="task-name" placeholder="Task Name" required>
-                </div>
-                <div class="form-row">
-                    <label for="task-description">Description</label>
-                    <textarea name="task-description" id="task-description" placeholder="(Optional description)" rows="5" columns="50"></textarea>
-                </div>
-                <div class="form-row">
-                    <label for="task-priority">Priority</label>
-                    <select name="task-priority" id="task-priority" required>
-                        <option value="" disabled selected>Priority</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="task-due-date">Due Date</label>
-                    <input type="date" name="task-due-date" id="task-due-date" required>
-                </div>
-                <div class="form-row">
-                    <label for="task-project-select">Project</label>
-                    <select name="task-project-select" id="task-project-select" required></select>
-                </div>
-                <div class="form-row">
-                    <button type="submit" form="new-task-form" name="submit-task" id="submit-task">Add Task</button>
-                </div>
-            </form>
-        </div>
-        <div id="edit-task-form-container">
-            <form action="main.js" id="edit-task-form">
-                <div class="top-row form-row">
-                    <legend>Edit Task</legend>
-                    <span id="close-edit-form" class="close-form">X</span>
-                </div>
-                <div class="form-row">
-                    <label for="edit-task-name">Task Name</label>
-                    <input type="text" name="edit-task-name" id="edit-task-name" placeholder="Task Name">
-                </div>
-                <div class="form-row">
-                    <label for="edit-task-description">Description</label>
-                    <textarea name="edit-task-description" id="edit-task-description" placeholder="(Optional description)" rows="5" columns="50"></textarea>
-                </div>
-                <div class="form-row">
-                    <label for="edit-task-priority">Priority</label>
-                    <select name="edit-task-priority" id="edit-task-priority">
-                        <option value="" disabled selected>Priority</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="edit-task-due-date">Due Date</label>
-                    <input type="date" name="edit-task-due-date" id="edit-task-due-date">
-                </div>
-                <div class="form-row">
-                    <label for="edit-task-project-select">Project</label>
-                    <select name="edit-task-project-select" id="edit-task-project-select"></select>
-                </div>
-                <div class="form-row">
-                    <button type="button" form="edit-task-form" name="submit-edit-form" id="submit-edit-form">Submit Changes</button>
-                </div>
-            </form>
-        </div>
-        <div id="main-display">
-
-        </div>
+        <div id="project-names"></div>
+      </div>
+      <div id="new-project-form-container">
+        <form action="main.js" id="new-project-form">
+          <div class="top-row form-row">
+            <legend>New Project</legend>
+            <span class="close-form">X</span>
+          </div>
+          <div class="form-row">
+            <label for="project-name">Project Name</label>
+            <input
+              type="text"
+              name="project-name"
+              id="project-name"
+              placeholder="Project Name"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <button
+              type="submit"
+              form="new-project-form"
+              name="submit-project"
+              id="submit-project"
+            >
+              Create Project
+            </button>
+          </div>
+        </form>
+      </div>
+      <div id="new-task-form-container">
+        <form action="main.js" id="new-task-form">
+          <div class="top-row form-row">
+            <legend>New Task</legend>
+            <span class="close-form">X</span>
+          </div>
+          <div class="form-row">
+            <label for="task-name">Task Name</label>
+            <input
+              type="text"
+              name="task-name"
+              id="task-name"
+              placeholder="Task Name"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="task-description">Description</label>
+            <textarea
+              name="task-description"
+              id="task-description"
+              placeholder="(Optional description)"
+              rows="5"
+              columns="50"
+            ></textarea>
+          </div>
+          <div class="form-row">
+            <label for="task-priority">Priority</label>
+            <select name="task-priority" id="task-priority" required>
+              <option value="" disabled selected>Priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="task-due-date">Due Date</label>
+            <input
+              type="date"
+              name="task-due-date"
+              id="task-due-date"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="task-project-select">Project</label>
+            <select
+              name="task-project-select"
+              id="task-project-select"
+              required
+            ></select>
+          </div>
+          <div class="form-row">
+            <button
+              type="submit"
+              form="new-task-form"
+              name="submit-task"
+              id="submit-task"
+            >
+              Add Task
+            </button>
+          </div>
+        </form>
+      </div>
+      <div id="edit-task-form-container">
+        <form action="main.js" id="edit-task-form">
+          <div class="top-row form-row">
+            <legend>Edit Task</legend>
+            <span id="close-edit-form" class="close-form">X</span>
+          </div>
+          <div class="form-row">
+            <label for="edit-task-name">Task Name</label>
+            <input
+              type="text"
+              name="edit-task-name"
+              id="edit-task-name"
+              placeholder="Task Name"
+            />
+          </div>
+          <div class="form-row">
+            <label for="edit-task-description">Description</label>
+            <textarea
+              name="edit-task-description"
+              id="edit-task-description"
+              placeholder="(Optional description)"
+              rows="5"
+              columns="50"
+            ></textarea>
+          </div>
+          <div class="form-row">
+            <label for="edit-task-priority">Priority</label>
+            <select name="edit-task-priority" id="edit-task-priority">
+              <option value="" disabled selected>Priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="edit-task-due-date">Due Date</label>
+            <input
+              type="date"
+              name="edit-task-due-date"
+              id="edit-task-due-date"
+            />
+          </div>
+          <div class="form-row">
+            <label for="edit-task-project-select">Project</label>
+            <select
+              name="edit-task-project-select"
+              id="edit-task-project-select"
+            ></select>
+          </div>
+          <div class="form-row">
+            <button
+              type="button"
+              form="edit-task-form"
+              name="submit-edit-form"
+              id="submit-edit-form"
+            >
+              Submit Changes
+            </button>
+          </div>
+        </form>
+      </div>
+      <div id="main-display"></div>
     </div>
-</body>
+  </body>
 </html>
