@@ -87,12 +87,12 @@ export const domManager = (function () {
     displayTitle.textContent = "All Tasks";
     const taskHeadersRow = document.createElement("div");
     taskHeadersRow.innerHTML = `<div class="task-headers-row">
-                                <div>Task</div>
-                                <div>Due Date</div>
-                                <div>Priority</div>
-                                <div>Project</div>
-                                <div>Status</div>
-                            </div>`;
+                                  <div>Task</div>
+                                  <div>Due Date</div>
+                                  <div>Priority</div>
+                                  <div>Project</div>
+                                  <div>Status</div>
+                                </div>`;
     mainDisplay.append(displayTitle, taskHeadersRow);
   }
 
